@@ -1,9 +1,9 @@
-# A Longitudinal Study of Content Control Mechanisms
-This repository contains the source code for the paper "A Longitudinal Study of Content Control Mechanisms" by Michael Dinzinger and Michael Granitzer, which was presented at the Temporal Web Analytics Workshop hosted at the ACM Web Conference 2024.
+# Study of Content Control Mechanisms
+This repository contains the source code for the paper "A Longitudinal Study of Content Control Mechanisms" by Michael Dinzinger and Michael Granitzer, which was presented at the [Temporal Web Analytics Workshop](http://temporalweb.net/) hosted at the ACM Web Conference 2024.
 
-[![Results](https://avatars.githubusercontent.com/u/46666731?s=50&v=4)](https://padas-lab-de.github.io/robotstxt-study/)
+[![Results](https://img.shields.io/badge/Robots.txt_study-Website-f8971c.svg?&style=for-the-badge&logo=github)](https://padas-lab-de.github.io/robotstxt-study/)
 
-## Installation
+## Code
 The Java project in the repository implements two technical pipelines for parsing and indexing web documents, using the [Stormcrawler](https://stormcrawler.net) software framework.
 
 ### Prerequisites
@@ -11,19 +11,7 @@ The Java project in the repository implements two technical pipelines for parsin
 - Maven
 - Docker
 
-### Caveats
-- This installation guide spawns a dockerized Apache Storm cluster as well as a dockerized OpenSearch instance. Note that you can also run the Stormcrawler on a locally hosted Storm cluster. Furthermore, you can store the extracted meta information in a local or remote non-dockerized OpenSearch instance. Modify therefore the `dev.properties` file.
-- The extraction of HTML annotations and Creative Commons outlinks is implemented using the existent Stormcrawler component `XPathFilter`. For extracting HTTP Response Headers, we use the customized Stormcrawler component `HTTPResponseHeaderFilter` (see [implementation](/src/main/java/eu/ows/parse/filter/HTTPResponseHeaderFilter.java)).
-- The extracted metadata is stored in OpenSearch using the Stormcrawler's OpenSearch module. The [IndexerBolt](https://github.com/DigitalPebble/storm-crawler/blob/master/external/opensearch/src/main/java/com/digitalpebble/stormcrawler/opensearch/bolt/IndexerBolt.java) filters by default all documents containing a `noindex` HTML meta tag. That is why we opted for using a `CustomizedIndexerBolt` (see [implementation](/src/main/java/eu/ows/bolt/CustomizedIndexerBolt.java)), which extends the default implementation and overrides the `filterDocument` method. This allows us to include all web documents in our research study, also the ones marked as `noindex`. `CustomizedIndexerBolt` furthermore overrides the `filterMetadata` method to filter out all metadata fields that are of interest for the research study using the asterisk expressions, e.g. `parse.meta.*`.
-- We use the [WARCSpout](https://github.com/DigitalPebble/storm-crawler/blob/master/external/warc/src/main/java/com/digitalpebble/stormcrawler/warc/WARCSpout.java) for downloading WARC files from the publicly available Common Crawl web archive. The WARC path files can be found [here](https://commoncrawl.org/overview) and are placed in the `./input` folder in the root directory of the project.
-- The project requires the latest version of StormCrawler (`12-SNAPSHOT`) to be installed locally using Maven.
-
-### Topologies
-- `html-parser`: Parsing pipeline for extracting meta information from **HTML annotations** and **HTTP Response Headers**. This topology is used for parsing the Common Crawl WARC files.
-- `fetch-html-parser`: In contrast to `html-parser`, this topology additionally fetches and parses the robots.txt and tdmrep.json file corresponding to the URL extracted from the Common Crawl WARC files.
-- `robotstxt-parser`: Parsing pipeline for **robots.txt** files.
-
-### Guide
+### Installation Guide
 1. Place the unzipped `warc.paths` file, corresponding to a CommonCrawl dump, in the `./input` folder in the root directory of the project.
 ```
 wget https://data.commoncrawl.org/crawl-data/CC-MAIN-2024-10/warc.paths.gz
@@ -61,7 +49,20 @@ Wait a few minutes until OpenSearch is up and running then initialise the index 
 docker-compose run --rm crawler storm jar crawler.jar org.apache.storm.flux.Flux topology/html-parser/crawler.flux --filter dev.properties
 ```
 
-### Example
+### Topologies
+- `html-parser`: Parsing pipeline for extracting meta information from **HTML annotations** and **HTTP Response Headers**. This topology is used for parsing the Common Crawl WARC files.
+- `fetch-html-parser`: In contrast to `html-parser`, this topology additionally fetches and parses the robots.txt and tdmrep.json file corresponding to the URL extracted from the Common Crawl WARC files.
+- `robotstxt-parser`: Parsing pipeline for **robots.txt** files.
+
+<details><summary><h3>Caveats</h3></summary>
+- This installation guide spawns a dockerized Apache Storm cluster as well as a dockerized OpenSearch instance. Note that you can also run the Stormcrawler on a locally hosted Storm cluster. Furthermore, you can store the extracted meta information in a local or remote non-dockerized OpenSearch instance. Modify therefore the `dev.properties` file.
+- The extraction of HTML annotations and Creative Commons outlinks is implemented using the existent Stormcrawler component `XPathFilter`. For extracting HTTP Response Headers, we use the customized Stormcrawler component `HTTPResponseHeaderFilter` (see [implementation](/src/main/java/eu/ows/parse/filter/HTTPResponseHeaderFilter.java)).
+- The extracted metadata is stored in OpenSearch using the Stormcrawler's OpenSearch module. The [IndexerBolt](https://github.com/DigitalPebble/storm-crawler/blob/master/external/opensearch/src/main/java/com/digitalpebble/stormcrawler/opensearch/bolt/IndexerBolt.java) filters by default all documents containing a `noindex` HTML meta tag. That is why we opted for using a `CustomizedIndexerBolt` (see [implementation](/src/main/java/eu/ows/bolt/CustomizedIndexerBolt.java)), which extends the default implementation and overrides the `filterDocument` method. This allows us to include all web documents in our research study, also the ones marked as `noindex`. `CustomizedIndexerBolt` furthermore overrides the `filterMetadata` method to filter out all metadata fields that are of interest for the research study using the asterisk expressions, e.g. `parse.meta.*`.
+- We use the [WARCSpout](https://github.com/DigitalPebble/storm-crawler/blob/master/external/warc/src/main/java/com/digitalpebble/stormcrawler/warc/WARCSpout.java) for downloading WARC files from the publicly available Common Crawl web archive. The WARC path files can be found [here](https://commoncrawl.org/overview) and are placed in the `./input` folder in the root directory of the project.
+- The project requires the latest version of StormCrawler (`12-SNAPSHOT`) to be installed locally using Maven.
+</details>
+
+<details><summary><h3>Example</h3></summary>
 The following JSON document shows the metadata extracted and stored for an examplary URL. Note that it contains general information about the web document, as well as the extracted HTML annotations and HTTP Response Headers. General information concerns e.g., `capturetime`, `url`, `domain`, `host`, `title`, `description`, `keywords`, `feedlink` and `language`. HTML annotations are in this example the Robots meta tags (stored in `parse.meta`, such as e.g., `parse.meta.robots`), whereas HTTP Response Headers are stored in `parse.http` (e.g. `parse.http.x-robots-tag`). For a better retracability, we also store the WARC file name and the offset of the WARC record (see `warc.file.name` and `warc.record.offset`).
 ```json
 {
@@ -91,11 +92,12 @@ The following JSON document shows the metadata extracted and stored for an examp
     etc.
 }
 ```
+</details>
 
 ## Promo Video
 
 
-<details><summary>Transcript</summary>
+<details><summary><h3>Transcript</h3></summary>
 Our study is concerned with the question how web publishers can control for what and under which conditions their content is allowed to be used. It is motivated but the recent breakthrough of generative AI. The rise of this technology yielded a number of ad hoc standards for the opt-out from generative AI training. These are, for instance, the Google-Extended user agent, the NoML meta tag proposed by the Search Engine Mojeek and the TDM Reservation Protocol. To put it in a bigger picture, these are recent measures of web content control in response to an increased awareness of web publishers' data sovereignty. As generative AI models or capable of imitating and reproducing its training data, which is mostly web data, this sovereignty is at serious risk. In our work, we study the prevalent measures of web content control inform of a longer to the analysis. This may help us to better answer which are the prevalent mechanisms and how well are they adopted among the practitioners community as well as to better understand the transition of web content control caused by generative AI.
 
 Conceptually, there are two ways of web content control:
