@@ -1,0 +1,177 @@
+{
+  "index_patterns": [
+    "content-*"
+  ],
+  "template": {
+    "settings": {
+      "index": {
+        "number_of_shards": 8,
+        "number_of_replicas": 0,
+        "refresh_interval": "15s"
+      }
+    },
+    "mappings": {
+      "dynamic_templates": [{
+        "fetcher.file.robots.num": {
+          "path_match": "fetcher.file.robots.num-*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "integer",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.robots.cached": {
+          "path_match": "fetcher.file.robots.cached",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "boolean",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.robots.allow-none.*": {
+          "path_match": "fetcher.file.robots.allow-none.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "boolean",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.robots.disallow-all.*": {
+          "path_match": "fetcher.file.robots.disallow-all.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "boolean",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.robots.bias.*": {
+          "path_match": "fetcher.file.robots.bias.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "integer",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.fetchTime": {
+          "path_match": "fetcher.file.fetchTime",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "date",
+            "format": "epoch_millis",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.tdmrep.num": {
+          "path_match": "fetcher.file.tdmrep.num-*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "integer",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.*.length": {
+          "path_match": "fetcher.file.*-length",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "integer",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.robots.crawldelay": {
+          "path_match": "fetcher.file.robots.crawldelay",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "integer",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher.file.robots.agents": {
+          "path_match": "fetcher.file.robots.agents.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "boolean",
+            "index": true
+          }
+        }
+      }, {
+        "parse": {
+          "path_match": "parse.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "keyword",
+            "index": true
+          }
+        }
+      }, {
+        "fetcher": {
+          "path_match": "fetcher.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "keyword",
+            "index": true
+          }
+        }
+      }, {
+        "warc": {
+          "path_match": "warc.*",
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "keyword",
+            "index": false
+          }
+        }
+      }],
+      "_source": {
+        "enabled": true
+      },
+      "properties": {
+        "url": {
+          "type": "keyword",
+          "index": true
+        },
+        "canonical": {
+          "type": "keyword",
+          "index": true
+        },
+        "host": {
+          "type": "keyword",
+          "index": true
+        },
+        "domain": {
+          "type": "keyword",
+          "index": true
+        },
+        "ip": {
+          "type": "ip",
+          "index": false
+        },
+        "title": {
+          "type": "text",
+          "index": true
+        },
+        "keywords": {
+          "type": "text",
+          "index": true
+        },
+        "description": {
+          "type": "text",
+          "index": true
+        },
+        "capturetime": {
+          "type": "date",
+          "format": "epoch_millis",
+          "index": true
+        }
+      }
+    }
+  }
+}

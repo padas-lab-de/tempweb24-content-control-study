@@ -1,0 +1,3 @@
+config:
+  parsefilters.config.file: "robotstxt-parsefilters.json"
+  jsoup.filters.config.file: ""

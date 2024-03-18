@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Allow: /wp-content/uploads/
+
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: GPTBot
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+User-agent: ia_archiver
+Disallow:

@@ -1,0 +1,171 @@
+{
+  "com.digitalpebble.stormcrawler.parse.JSoupFilters": [
+    {
+      "class": "com.digitalpebble.stormcrawler.jsoup.XPathFilter",
+      "name": "XPathFilter",
+      "params": {
+        "parse.canonical": [
+            "//*[@rel=\"canonical\"]/@href",
+            "//*[@property=\"og:url\"]/@content"
+        ],
+        "parse.title": [
+          "//TITLE[1]",
+          "//META[@name=\"title\"]/@content",
+          "//META[@name=\"dc:title\"]/@content",
+          "//META[@property=\"og:title\"]/@content",
+          "//H1[1]"
+        ],
+        "parse.description": [
+          "//META[@name=\"description\"]/@content",
+          "//META[@name=\"Description\"]/@content",
+          "//META[@name=\"dc:description\"]/@content",
+          "//META[@property=\"og:description\"]/@content"
+        ],
+        "parse.keywords": [
+          "//META[@name=\"keywords\"]/@content",
+          "//META[@name=\"meta:keyword\"]/@content",
+          "//META[@name=\"dc:subject\"]/@content"
+        ],
+        "parse.feedlink": [
+           "//LINK[@type=\"application/rss+xml\"]/@href",
+           "//LINK[@type=\"application/atom+xml\"]/@href"
+        ],
+        "parse.html.language": "//HTML/@lang",
+        "parse.meta.language": [
+          "//META[@name=\"language\"]/@content",
+          "//META[@name=\"Language\"]/@content",
+          "//META[@name=\"LANGUAGE\"]/@content"
+        ],
+        "parse.meta.content-language": [
+          "//META[@http-equiv=\"content-language\"]/@content",
+          "//META[@http-equiv=\"Content-Language\"]/@content",
+          "//META[@http-equiv=\"CONTENT-LANGUAGE\"]/@content"
+        ],
+        "parse.meta.dc.language": [
+          "//META[@name=\"dc.language\"]/@content",
+          "//META[@name=\"DC.Language\"]/@content",
+          "//META[@name=\"DC.LANGUAGE\"]/@content"
+        ],
+        "parse.rel.author": [
+          "//*[@rel=\"author\"]/@href",
+          "//*[@rel=\"Author\"]/@href",
+          "//*[@rel=\"AUTHOR\"]/@href"
+        ],
+        "parse.rel.license": [
+          "//*[@rel=\"license\"]/@href",
+          "//*[@rel=\"License\"]/@href",
+          "//*[@rel=\"LICENSE\"]/@href"
+        ],
+        "parse.meta.author": [
+          "//META[@name=\"author\"]/@content",
+          "//META[@name=\"Author\"]/@content",
+          "//META[@name=\"AUTHOR\"]/@content"
+        ],
+        "parse.meta.copyright": [
+          "//META[@name=\"copyright\"]/@content",
+          "//META[@name=\"Copyright\"]/@content",
+          "//META[@name=\"COPYRIGHT\"]/@content"
+        ],
+        "parse.meta.license": [
+          "//META[@name=\"license\"]/@content",
+          "//META[@name=\"License\"]/@content",
+          "//META[@name=\"LICENSE\"]/@content"
+        ],
+        "parse.meta.license-uri": [
+          "//META[@name=\"license:uri\"]/@content",
+          "//META[@name=\"License:uri\"]/@content",
+          "//META[@name=\"License:Uri\"]/@content",
+          "//META[@name=\"LICENSE:URI\"]/@content"
+        ],
+        "parse.meta.rights": [
+          "//META[@name=\"rights\"]/@content",
+          "//META[@name=\"Rights\"]/@content",
+          "//META[@name=\"RIGHTS\"]/@content"
+        ],
+        "parse.meta.rights-standard": [
+          "//META[@name=\"rights-standard\"]/@content",
+          "//META[@name=\"Rights-standard\"]/@content",
+          "//META[@name=\"Rights-Standard\"]/@content",
+          "//META[@name=\"RIGHTS-STANDARD\"]/@content"
+        ],
+        "parse.meta.dc.creator": [
+          "//META[@name=\"dc.creator\"]/@content",
+          "//META[@name=\"DC.creator\"]/@content",
+          "//META[@name=\"DC.Creator\"]/@content",
+          "//META[@name=\"DC.CREATOR\"]/@content"
+        ],
+        "parse.meta.dc.accessrights": [
+          "//META[@name=\"dc.accessrights\"]/@content",
+          "//META[@name=\"DC.accessrights\"]/@content",
+          "//META[@name=\"DC.Accessrights\"]/@content",
+          "//META[@name=\"DC.ACCESSRIGHTS\"]/@content"
+        ],
+        "parse.meta.dc.license": [
+          "//META[@name=\"dc.license\"]/@content",
+          "//META[@name=\"DC.license\"]/@content",
+          "//META[@name=\"DC.License\"]/@content",
+          "//META[@name=\"DC.LICENSE\"]/@content"
+        ],
+        "parse.meta.dc.provenance": [
+          "//META[@name=\"dc.provenance\"]/@content",
+          "//META[@name=\"DC.provenance\"]/@content",
+          "//META[@name=\"DC.Provenance\"]/@content",
+          "//META[@name=\"DC.PROVENANCE\"]/@content"
+        ],
+        "parse.meta.dc.publisher": [
+          "//META[@name=\"dc.publisher\"]/@content",
+          "//META[@name=\"DC.publisher\"]/@content",
+          "//META[@name=\"DC.Publisher\"]/@content",
+          "//META[@name=\"DC.PUBLISHER\"]/@content"
+        ],
+        "parse.meta.dc.rights": [
+          "//META[@name=\"dc.rights\"]/@content",
+          "//META[@name=\"DC.rights\"]/@content",
+          "//META[@name=\"DC.Rights\"]/@content",
+          "//META[@name=\"DC.RIGHTS\"]/@content"
+        ],
+        "parse.meta.dc.rightsholder": [
+          "//META[@name=\"dc.rightsholder\"]/@content",
+          "//META[@name=\"DC.rightsholder\"]/@content",
+          "//META[@name=\"DC.Rightsholder\"]/@content",
+          "//META[@name=\"DC.RIGHTSHOLDER\"]/@content"
+        ],
+        "parse.meta.dc.source": [
+          "//META[@name=\"dc.source\"]/@content",
+          "//META[@name=\"DC.source\"]/@content",
+          "//META[@name=\"DC.Source\"]/@content",
+          "//META[@name=\"DC.SOURCE\"]/@content"
+        ],
+        "parse.creativecommons": [
+          "//A[starts-with(@href, 'http://creativecommons.org')]/@href",
+          "//A[starts-with(@href, 'https://creativecommons.org')]/@href",
+          "//A[starts-with(@href, 'http://www.creativecommons.org')]/@href",
+          "//A[starts-with(@href, 'https://www.creativecommons.org')]/@href"
+        ],
+        "parse.meta.robots": [
+          "//META[@name=\"robots\"]/@content",
+          "//META[@name=\"Robots\"]/@content",
+          "//META[@name=\"ROBOTS\"]/@content"
+        ],
+        "parse.meta.tdm-reservation": [
+          "//META[@name=\"tdm-reservation\"]/@content",
+          "//META[@name=\"Tdm-reservation\"]/@content",
+          "//META[@name=\"tdm-Reservation\"]/@content",
+          "//META[@name=\"Tdm-Reservation\"]/@content",
+          "//META[@name=\"TDM-reservation\"]/@content",
+          "//META[@name=\"TDM-Reservation\"]/@content",
+          "//META[@name=\"TDM-RESERVATION\"]/@content"
+        ],
+        "parse.meta.tdm-policy": [
+          "//META[@name=\"tdm-policy\"]/@content",
+          "//META[@name=\"Tdm-policy\"]/@content",
+          "//META[@name=\"tdm-Policy\"]/@content",
+          "//META[@name=\"Tdm-Policy\"]/@content",
+          "//META[@name=\"TDM-policy\"]/@content",
+          "//META[@name=\"TDM-Policy\"]/@content",
+          "//META[@name=\"TDM-POLICY\"]/@content"
+        ]
+      }
+    }
+  ]
+}

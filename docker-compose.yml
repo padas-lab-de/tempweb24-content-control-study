@@ -1,0 +1,71 @@
+version: "3.6"
+
+services:
+  # Apache Storm components
+  # - Zookeeper coordinates the communication between Nimbus and the Supervisors
+  zookeeper:
+    image: zookeeper:${ZOOKEEPER_VERSION:-3.6.3}
+    container_name: zookeeper
+    restart: always
+
+  # - the daemon Nimbus runs on the master node
+  storm-nimbus:
+    image: storm:${STORM_VERSION:-2.6.0}
+    container_name: storm-nimbus
+    command: storm nimbus
+        -c worker.childopts="-Xmx%HEAP-MEM%m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=artifacts/heapdump"
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper
+    external_links:
+      - zookeeper
+    restart: always
+
+  # - the Supervisors run on the worker nodes
+  storm-supervisor:
+    image: storm:${STORM_VERSION:-2.6.0}
+    container_name: storm-supervisor
+    command: storm supervisor
+        -c worker.childopts="-Xmx%HEAP-MEM%m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=artifacts/heapdump"
+    depends_on:
+      - zookeeper
+      - storm-nimbus
+    links:
+      - zookeeper
+      - storm-nimbus:nimbus
+    volumes:
+      - ./input:/data/input
+      - ./logs:/logs
+    external_links:
+      - zookeeper
+    restart: always
+
+  # - the Storm UI provides diagnostics about the Storm cluster
+  storm-ui:
+    image: storm:${STORM_VERSION:-2.6.0}
+    container_name: storm-ui
+    command: storm ui
+    depends_on:
+      - storm-nimbus
+    links:
+      - storm-nimbus:nimbus
+    ports:
+      - 8080:8080
+    external_links:
+      - zookeeper
+    restart: always
+
+  # - to launch a topology
+  # - will exit on startup
+  crawler:
+    build: .
+    container_name: crawler
+    command: /bin/bash
+    depends_on:
+      - storm-nimbus
+    links:
+      - storm-nimbus:nimbus
+    volumes:
+      - ./input:/data/input
+    restart: "no"
