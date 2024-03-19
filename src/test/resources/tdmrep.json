@@ -1,0 +1,15 @@
+[
+  {
+    "location": "/directory-a/",
+    "tdm-reservation": 1
+  },
+  {
+    "location": "/directory-b/html/",
+    "tdm-reservation": 1,
+    "tdm-policy":"https://provider.com/policies/policy.json"
+  },
+  {
+    "location": "/directory-b/images/*.jpg",
+    "tdm-reservation": 0
+  }
+]

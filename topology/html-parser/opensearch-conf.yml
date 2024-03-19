@@ -1,0 +1,6 @@
+config:
+  # OpenSearch indexer bolt
+  opensearch.indexer.addresses: ${opensearch.address}
+  opensearch.indexer.user: ${opensearch.user}
+  opensearch.indexer.password: ${opensearch.password}
+  opensearch.indexer.index.name: ${content.index.name}
