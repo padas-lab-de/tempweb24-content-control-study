@@ -54,15 +54,15 @@ docker-compose run --rm crawler storm jar crawler.jar org.apache.storm.flux.Flux
 - `fetch-html-parser`: In contrast to `html-parser`, this topology additionally fetches and parses the robots.txt and tdmrep.json file corresponding to the URL extracted from the Common Crawl WARC files.
 - `robotstxt-parser`: Parsing pipeline for **robots.txt** files.
 
-<details><summary><h3>Caveats</h3></summary>
-- This installation guide spawns a dockerized Apache Storm cluster as well as a dockerized OpenSearch instance. Note that you can also run the Stormcrawler on a locally hosted Storm cluster. Furthermore, you can store the extracted meta information in a local or remote non-dockerized OpenSearch instance. Modify therefore the `dev.properties` file.
+### Caveats
+- The installation guide spawns a dockerized Apache Storm cluster as well as a dockerized OpenSearch instance. Note that you can also run the Stormcrawler on a locally hosted Storm cluster. Furthermore, you can store the extracted meta information in a local or remote non-dockerized OpenSearch instance. Modify therefore the `dev.properties` file.
 - The extraction of HTML annotations and Creative Commons outlinks is implemented using the existent Stormcrawler component `XPathFilter`. For extracting HTTP Response Headers, we use the customized Stormcrawler component `HTTPResponseHeaderFilter` (see [implementation](/src/main/java/eu/ows/parse/filter/HTTPResponseHeaderFilter.java)).
 - The extracted metadata is stored in OpenSearch using the Stormcrawler's OpenSearch module. The [IndexerBolt](https://github.com/DigitalPebble/storm-crawler/blob/master/external/opensearch/src/main/java/com/digitalpebble/stormcrawler/opensearch/bolt/IndexerBolt.java) filters by default all documents containing a `noindex` HTML meta tag. That is why we opted for using a `CustomizedIndexerBolt` (see [implementation](/src/main/java/eu/ows/bolt/CustomizedIndexerBolt.java)), which extends the default implementation and overrides the `filterDocument` method. This allows us to include all web documents in our research study, also the ones marked as `noindex`. `CustomizedIndexerBolt` furthermore overrides the `filterMetadata` method to filter out all metadata fields that are of interest for the research study using the asterisk expressions, e.g. `parse.meta.*`.
-- We use the [WARCSpout](https://github.com/DigitalPebble/storm-crawler/blob/master/external/warc/src/main/java/com/digitalpebble/stormcrawler/warc/WARCSpout.java) for downloading WARC files from the publicly available Common Crawl web archive. The WARC path files can be found [here](https://commoncrawl.org/overview) and are placed in the `./input` folder in the root directory of the project.
+- We use the [WARCSpout](https://github.com/DigitalPebble/storm-crawler/blob/master/external/warc/src/main/java/com/digitalpebble/stormcrawler/warc/WARCSpout.java) for downloading WARC files from the publicly available Common Crawl web archive. The WARC path files can be found [here](https://commoncrawl.org/overview) and are placed in the *./input* folder in the root directory of the project.
 - The project requires the latest version of StormCrawler (`12-SNAPSHOT`) to be installed locally using Maven.
 </details>
 
-<details><summary><h3>Example</h3></summary>
+### Example
 The following JSON document shows the metadata extracted and stored for an examplary URL. Note that it contains general information about the web document, as well as the extracted HTML annotations and HTTP Response Headers. General information concerns e.g., `capturetime`, `url`, `domain`, `host`, `title`, `description`, `keywords`, `feedlink` and `language`. HTML annotations are in this example the Robots meta tags (stored in `parse.meta`, such as e.g., `parse.meta.robots`), whereas HTTP Response Headers are stored in `parse.http` (e.g. `parse.http.x-robots-tag`). For a better retracability, we also store the WARC file name and the offset of the WARC record (see `warc.file.name` and `warc.record.offset`).
 ```json
 {
@@ -92,25 +92,29 @@ The following JSON document shows the metadata extracted and stored for an examp
     etc.
 }
 ```
-</details>
 
 ## Promo Video
+[Click here for the video](https://github.com/padas-lab-de/tempweb24-content-control-study/blob/main/video/intro.mp4)
 
-
-<details><summary><h3>Transcript</h3></summary>
-Our study is concerned with the question how web publishers can control for what and under which conditions their content is allowed to be used. It is motivated but the recent breakthrough of generative AI. The rise of this technology yielded a number of ad hoc standards for the opt-out from generative AI training. These are, for instance, the Google-Extended user agent, the NoML meta tag proposed by the Search Engine Mojeek and the TDM Reservation Protocol. To put it in a bigger picture, these are recent measures of web content control in response to an increased awareness of web publishers' data sovereignty. As generative AI models or capable of imitating and reproducing its training data, which is mostly web data, this sovereignty is at serious risk. In our work, we study the prevalent measures of web content control inform of a longer to the analysis. This may help us to better answer which are the prevalent mechanisms and how well are they adopted among the practitioners community as well as to better understand the transition of web content control caused by generative AI.
-
+<details><summary><b>Details</b></summary>
+<br>
+Our study is concerned with the question how web publishers can control the conditions under which their content is allowed to be used by others. It was originally motivated by the recent breakthrough of generative AI. The rise of this technology yielded a number of ad hoc standards for the opt-out from generative AI training. These are, for instance, the Google-Extended user agent, the NoML meta tag proposed by the Search Engine Mojeek and the TDM Reservation Protocol. To put it in a bigger picture, these are recent measures of web content control in response to an increased awareness of web publishers regarding data sovereignty. As generative AI models are capable of imitating and reproducing its training data, which is mostly web data, this sovereignty is at serious risk. In our work, we study the prevalent measures of web content control in form of a longitudinal analysis. This may help us to better answer which are the prevalent mechanisms and how well are they adopted among the practitioners community as well as to better understand the transition of web content control caused by generative AI.
+<br>
+<br>
 Conceptually, there are two ways of web content control:
-
-- First, the regulation of web agents (or crawlers), autonomous bots that automatically traverse the enormous web of hyperlinks and harvest online documents. These documents are further indexed by Search Engines or prepared as data products, e.g., datasets used in the training of Machine Learning and AI models. The commonly agreed standard for the regulation of web robots is the Robots Exclusion Protocol. The protocol, which was initially introduced already 30 years ago, therefore place a central role in the ecosystem of the web.
-
-- The second means to apply control over web content is the annotation with licensing information. The delivered HTML documents offer license-related semantic markup that indicate the terms and conditions of use to any robotic data consumers.
-
+<ul>
+<li>
+First, the regulation of web agents (or crawlers), autonomous bots that automatically traverse the enormous web of hyperlinks and harvest online documents. These documents are further indexed by Search Engines or prepared as data products, e.g., datasets used in the training of Machine Learning and AI models. The commonly agreed standard for the regulation of web robots is the Robots Exclusion Protocol. The protocol, which was initially introduced already 30 years ago, therefore place a central role in the ecosystem of the web.
+</li>
+<li>
+The second means to apply control over web content is the annotation with licensing information. The delivered HTML documents offer license-related semantic markup that indicate the terms and conditions of use to any robotic data consumers.
+</li>
+</ul>
+<br>
 We therefore analyzed eight publicly available crawl dumps from Common Crawl, which have been collected between 2016 and - for the moment that this video is recorded - December 2023. For studying the prevalence of web content control in the wild, we parsed both the available dumps for robots.txt files, containing between 58M and 92M documents, as well as for regular web pages. The robots.txt dumps were parsed completely, where as for regular dumps we restricted the analysis to the first 60M documents in the WARC files due their large size.
-
-Two of the key results of the empirical study are the following:
-
-The user agents this allowed and the robots.txt files reveal a clear stance against crawlers feeding AI models (e.g. GPTBot) and misbehaving crawlers (e.g. PetalBot). Regarding the annotation of licensing information
+<br>
+<br>
+Two of the key results of the empirical study are the following: The user agents disallowed in the robots.txt files reveal a clear stance against crawlers feeding AI models (e.g. GPTBot) and misbehaving crawlers (e.g. PetalBot). Regarding the annotation of licensing information, we found that these are rarely provided. This clearly questions the effectiveness of license-aware crawling and indicates that terms and conditions in textual form dominate over machine-readable annotations.
 </details>
 
 ## Cite
